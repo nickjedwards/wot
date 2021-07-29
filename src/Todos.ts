@@ -21,7 +21,7 @@ export default class Todos {
         return this.todos
     }
 
-    public list() {
+    public list(): void {
         let message: string = ""
 
         this.todos.forEach((todo: string, index: number) => {
