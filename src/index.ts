@@ -6,7 +6,7 @@ import path from "path"
 import { Command, OptionValues } from "commander"
 import Todos from "./Todos"
 
-let file: string = path.resolve(os.homedir(), ".config", "wot", "todo.json")
+const file: string = path.resolve(os.homedir(), ".config", "wot", "todo.json")
 
 if (!fs.existsSync(file)) {
     if (!fs.existsSync(path.dirname(file))) {
