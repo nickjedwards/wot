@@ -3,40 +3,48 @@
 import fs from "fs"
 import os from "os"
 import path from "path"
-import { Command } from "commander"
+import { Command, OptionValues } from "commander"
 import Todos from "./Todos"
 
-let file: string = `${process.cwd()}/todo.json`
+let file: string = path.resolve(os.homedir(), ".config", "wot", "todo.json")
 
 if (!fs.existsSync(file)) {
-    file = `${os.homedir()}/.config/wip/todo.json`
-
     if (!fs.existsSync(path.dirname(file))) {
-        fs.mkdirSync(path.dirname(file), { recursive: true });
-        fs.writeFileSync(file, JSON.stringify([]), "utf8")
+        fs.mkdirSync(path.dirname(file), { recursive: true })
     }
-}
 
-const todos: Todos = new Todos(JSON.parse(fs.readFileSync(file, "utf8")) || [])
+    fs.writeFileSync(file, JSON.stringify({}), "utf-8")
+}
 
 const program = new Command()
 
+program.version(process.env.npm_package_version || "0.0.0", "-v, --version", "Output the current version")
+
 program.command("add <todo>")
+    .option('-p, --project', "Project todo")
     .description("Got anything else on today?")
-    .action((todo: string) => {
-        fs.writeFileSync(file, JSON.stringify(todos.add(todo)), "utf8")
+    .action((todo: string, options: OptionValues): void => {
+        const key: string = options.project ? process.cwd() : os.homedir()
+
+        new Todos(file).add(key, todo)
     })
 
 program.command("done <index>")
+    .option('-p, --project', "Project todo")
     .description("Done anything today?")
-    .action((index: number) => {
-        fs.writeFileSync(file, JSON.stringify(todos.done(index)), "utf8")
+    .action((index: number, options: OptionValues): void => {
+        const key: string = options.project ? process.cwd() : os.homedir();
+
+        new Todos(file).done(key, index)
     })
 
 program.command("list")
+    .option('-p, --project', "Project todo")
     .description("What's on today?")
-    .action(() => todos.list())
+    .action((options: OptionValues): void => {
+        const key: string = options.project ? process.cwd() : os.homedir()
+
+        new Todos(file).list(key)
+    })
 
 program.parse(process.argv)
-
-process.exit(0)
