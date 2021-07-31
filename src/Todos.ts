@@ -1,5 +1,10 @@
 import fs from "fs"
 
+enum Icon {
+    Calendar = 0x1F4C5,
+    Check = 0x2714,
+}
+
 interface ITodos {
     [key: string]: string[]
 }
@@ -24,7 +29,7 @@ export default class Todos {
             let message: string = ""
 
             todos.splice(index - 1, 1).forEach((todo: string) => {
-                message += `${String.fromCodePoint(0x2714)} ${todo}\n`
+                message += `${String.fromCodePoint(Icon.Check)} ${todo}\n`
             })
 
             this.write()
@@ -34,12 +39,12 @@ export default class Todos {
     }
 
     public list(key: string): void {
-        const todos: string[] = this.todos[key] || []
-
         let message: string = ""
 
+        const todos: string[] = this.todos[key] || []
+
         todos.forEach((todo: string, index: number) => {
-            message += `${String.fromCodePoint(0x1F4C5)} ${index + 1}: ${todo}\n`
+            message += `${String.fromCodePoint(Icon.Calendar)} ${index + 1}: ${todo}\n`
         })
 
         process.stdout.write(message)
