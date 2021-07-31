@@ -13,7 +13,7 @@ interface ITodos {
 export default class Todos {
     private todos: ITodos
 
-    constructor(private file: string) {
+    public constructor(private file: string) {
         this.todos = this.read()
     }
 
