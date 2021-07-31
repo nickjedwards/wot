@@ -1,4 +1,5 @@
 import fs from "fs"
+import chalk from "chalk"
 
 enum Icon {
     Calendar = 0x1F4C5,
@@ -29,7 +30,7 @@ export default class Todos {
             let message: string = ""
 
             todos.splice(index - 1, 1).forEach((todo: string) => {
-                message += `${String.fromCodePoint(Icon.Check)} ${todo}\n`
+                message += chalk.green(String.fromCodePoint(Icon.Check), chalk.strikethrough(`${todo}\n`))
             })
 
             this.write()
@@ -44,7 +45,7 @@ export default class Todos {
         const todos: string[] = this.todos[key] || []
 
         todos.forEach((todo: string, index: number) => {
-            message += `${String.fromCodePoint(Icon.Calendar)} ${index + 1}: ${todo}\n`
+            message += `${chalk.yellow.bold(String.fromCodePoint(Icon.Calendar), `${index + 1}:`)} ${todo}\n`
         })
 
         process.stdout.write(message)
