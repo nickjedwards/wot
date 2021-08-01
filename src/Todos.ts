@@ -1,9 +1,11 @@
 import fs from "fs"
+import path from "path"
 import chalk from "chalk"
 
 enum Icon {
     Calendar = 0x1F4C5,
     Check = 0x2714,
+    Folder = 0x1F4C1,
 }
 
 interface ITodos {
@@ -39,16 +41,44 @@ export default class Todos {
         }
     }
 
-    public list(key: string): void {
+    public list(path: string | null): void {
         let message: string = ""
 
-        const todos: string[] = this.todos[key] || []
+        if (path) {
+            message = this.project(path)
+        } else {
+            message = this.all()
+        }
+
+        process.stdout.write(message)
+    }
+
+    protected project(project: string): string {
+        let message: string = ""
+
+        const todos: string[] = this.todos[project]
 
         todos.forEach((todo: string, index: number) => {
             message += `${chalk.yellow.bold(String.fromCodePoint(Icon.Calendar), `${index + 1}:`)} ${todo}\n`
         })
 
-        process.stdout.write(message)
+        return message
+    }
+
+    protected all(): string {
+        let message: string = ""
+
+        for (const [project, todos] of Object.entries(this.todos)) {
+            message += `${chalk.bold(String.fromCodePoint(Icon.Folder), path.basename(project))} (${project})\n`
+            
+            todos.forEach((todo: string, index: number) => {
+                message += `${chalk.yellow.bold(`${index + 1}:`)} ${todo}\n`
+            })
+
+            message += "\n"
+        }
+
+        return message
     }
 
     protected read() {

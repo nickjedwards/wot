@@ -24,27 +24,32 @@ program.command("add <todo>")
     .option('-p, --project', "Project todo")
     .description("Got anything else on today?")
     .action((todo: string, options: OptionValues): void => {
-        const key: string = options.project ? process.cwd() : os.homedir()
+        const project: string = options.project ? process.cwd() : os.homedir()
 
-        new Todos(file).add(key, todo)
+        new Todos(file).add(project, todo)
     })
 
 program.command("done <index>")
     .option('-p, --project', "Project todo")
     .description("Done anything today?")
     .action((index: number, options: OptionValues): void => {
-        const key: string = options.project ? process.cwd() : os.homedir();
+        const project: string = options.project ? process.cwd() : os.homedir();
 
-        new Todos(file).done(key, index)
+        new Todos(file).done(project, index)
     })
 
 program.command("list")
     .option('-p, --project', "Project todo")
+    .option('-a, --all', "What's on today?")
     .description("What's on today?")
     .action((options: OptionValues): void => {
-        const key: string = options.project ? process.cwd() : os.homedir()
+        let project: string | null = options.project ? process.cwd() : os.homedir()
 
-        new Todos(file).list(key)
+        if (options.all) {
+            project = null
+        }
+
+        new Todos(file).list(project)
     })
 
 program.parse(process.argv)
