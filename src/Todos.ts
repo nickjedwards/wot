@@ -3,9 +3,8 @@ import path from "path"
 import chalk from "chalk"
 
 enum Icon {
-    Briefcase = 0x1F4BC,
-    Calendar = 0x1F4C5,
     Check = 0x2714,
+    Folder = 0x1F4C2,
     Memo = 0x1F4DD,
 }
 
@@ -70,7 +69,7 @@ export default class Todos {
         let message: string = ""
 
         for (const [project, todos] of Object.entries(this.todos)) {
-            message += `${chalk.bold(String.fromCodePoint(Icon.Briefcase), path.basename(project))} (${project})\n`
+            message += `${chalk.bold(String.fromCodePoint(Icon.Folder), path.basename(project))} (${project})\n`
             
             todos.forEach((todo: string) => {
                 message += `${String.fromCodePoint(Icon.Memo)} ${todo}\n`
