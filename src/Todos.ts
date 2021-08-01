@@ -57,7 +57,7 @@ export default class Todos {
     protected project(project: string): string {
         let message: string = ""
 
-        const todos: string[] = this.todos[project]
+        const todos: string[] = this.todos[project] || []
 
         todos.forEach((todo: string, index: number) => {
             message += `${chalk.yellow.bold(String.fromCodePoint(Icon.Memo), `${index + 1}:`)} ${todo}\n`
