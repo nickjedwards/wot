@@ -9,7 +9,7 @@ import Todos from "./Todos"
 const file: string = path.resolve(os.homedir(), ".config", "wot", "todo.json")
 
 if (!fs.existsSync(file)) {
-    const configDir = path.dirname(file)
+    const configDir: string = path.dirname(file)
 
     if (!fs.existsSync(configDir)) {
         fs.mkdirSync(configDir, { recursive: true })
