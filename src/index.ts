@@ -8,13 +8,16 @@ import Todos from "./Todos"
 
 const file: string = path.resolve(os.homedir(), ".config", "wot", "todo.json")
 
+// Create todo.json file if it does not exist
 if (!fs.existsSync(file)) {
     const configDir: string = path.dirname(file)
 
+    // Create wot configuration directory if it does not exist
     if (!fs.existsSync(configDir)) {
         fs.mkdirSync(configDir, { recursive: true })
     }
 
+    // Create and write empty json object to todos.json file
     fs.writeFileSync(file, JSON.stringify({}), "utf-8")
 }
 

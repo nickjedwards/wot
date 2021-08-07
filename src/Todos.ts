@@ -15,16 +15,33 @@ interface ITodos {
 export default class Todos {
     private todos: ITodos
 
+    /**
+     * Creates an instance of todos.
+     * 
+     * @param file Path to json file.
+     */
     public constructor(private file: string) {
         this.todos = this.read()
     }
 
+    /**
+     * Adds a new todo to json file.
+     * 
+     * @param key Project directory.
+     * @param todo Todo to add.
+     */
     public add(key: string, todo: string): void {
         this.todos[key] = [...this.todos[key] || [], todo]
 
         this.write()
     }
 
+    /**
+     * Removes a todo from json file.
+     * 
+     * @param key Project directory.
+     * @param index Todo index in `key`.
+     */
     public done(key: string, index: number): void {
         const todos: string[] = this.todos[key] || []
 
@@ -41,16 +58,27 @@ export default class Todos {
         }
     }
 
-    public list(path: string | null): void {
-        const message: string = path ? this.project(path) : this.all()
+    /**
+     * Lists todos in json file.
+     * 
+     * @param key Project directory.
+     */
+    public list(key: string | null): void {
+        const message: string = key ? this.project(key) : this.all()
 
         process.stdout.write(message)
     }
 
-    protected project(project: string): string {
+    /**
+     * Returns output string for listing project todos.
+     * 
+     * @param key Project directory.
+     * @returns Command output message.
+     */
+    protected project(key: string): string {
         let message: string = ""
 
-        const todos: string[] = this.todos[project] || []
+        const todos: string[] = this.todos[key] || []
 
         todos.forEach((todo: string, index: number) => {
             message += `${chalk.yellow.bold(String.fromCodePoint(Icon.Memo), `${index + 1}:`)} ${todo}\n`
@@ -59,6 +87,11 @@ export default class Todos {
         return message
     }
 
+    /**
+     * Returns output string for listing all todos.
+     * 
+     * @returns Command output message.
+     */
     protected all(): string {
         let message: string = ""
 
@@ -75,6 +108,11 @@ export default class Todos {
         return message
     }
 
+    /**
+     * Reads todos from json file.
+     * 
+     * @returns Todos object.
+     */
     protected read(): ITodos {
         try {
             return JSON.parse(fs.readFileSync(this.file, "utf-8"))
@@ -84,6 +122,9 @@ export default class Todos {
         }
     }
 
+    /**
+     * Writes todos to json file.
+     */
     protected write(): void {
         try {
             fs.writeFileSync(this.file, JSON.stringify(this.todos), "utf-8")
