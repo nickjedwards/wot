@@ -9,8 +9,10 @@ import Todos from "./Todos"
 const file: string = path.resolve(os.homedir(), ".config", "wot", "todo.json")
 
 if (!fs.existsSync(file)) {
-    if (!fs.existsSync(path.dirname(file))) {
-        fs.mkdirSync(path.dirname(file), { recursive: true })
+    const configDir = path.dirname(file)
+
+    if (!fs.existsSync(configDir)) {
+        fs.mkdirSync(configDir, { recursive: true })
     }
 
     fs.writeFileSync(file, JSON.stringify({}), "utf-8")
@@ -18,11 +20,11 @@ if (!fs.existsSync(file)) {
 
 const program = new Command()
 
-program.version(process.env.npm_package_version || "0.0.0", "-v, --version", "Output the current version")
+program.version(process.env.npm_package_version || ":(", "-v, --version", "Output the current version")
 
 program.command("add <todo>")
-    .option('-p, --project', "Project todo")
-    .description("Got anything else on today?")
+    .option('-p, --project', "Add a new todo for this project")
+    .description("Create a new todo")
     .action((todo: string, options: OptionValues): void => {
         const project: string = options.project ? process.cwd() : os.homedir()
 
@@ -30,8 +32,8 @@ program.command("add <todo>")
     })
 
 program.command("done <index>")
-    .option('-p, --project', "Project todo")
-    .description("Done anything today?")
+    .option('-p, --project', "Complete a todo for this project")
+    .description("Complete a todo")
     .action((index: number, options: OptionValues): void => {
         const project: string = options.project ? process.cwd() : os.homedir();
 
@@ -39,9 +41,9 @@ program.command("done <index>")
     })
 
 program.command("list")
-    .option('-p, --project', "Project todo")
-    .option('-a, --all', "What's on today?")
-    .description("What's on today?")
+    .option('-p, --project', "List your todos for this project")
+    .option('-a, --all', "List all your todos")
+    .description("List your todos")
     .action((options: OptionValues): void => {
         let project: string | null = options.project ? process.cwd() : os.homedir()
 
