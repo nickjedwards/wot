@@ -75,7 +75,7 @@ export default class Todos {
         return message
     }
 
-    protected read() {
+    protected read(): ITodos {
         try {
             return JSON.parse(fs.readFileSync(this.file, "utf-8"))
         } catch (error) {
@@ -84,7 +84,7 @@ export default class Todos {
         }
     }
 
-    protected write() {
+    protected write(): void {
         try {
             fs.writeFileSync(this.file, JSON.stringify(this.todos), "utf-8")
         } catch (error) {
