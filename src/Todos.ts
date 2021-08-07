@@ -42,13 +42,7 @@ export default class Todos {
     }
 
     public list(path: string | null): void {
-        let message: string = ""
-
-        if (path) {
-            message = this.project(path)
-        } else {
-            message = this.all()
-        }
+        const message: string = path ? this.project(path) : this.all()
 
         process.stdout.write(message)
     }
