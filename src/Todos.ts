@@ -1,12 +1,7 @@
 import fs from "fs"
 import path from "path"
 import chalk from "chalk"
-
-enum Icon {
-    Check = 0x2714,
-    Folder = 0x1F4C2,
-    Memo = 0x1F4DD,
-}
+import Icons from "./Icons"
 
 interface ITodos {
     [key: string]: string[]
@@ -17,7 +12,7 @@ export default class Todos {
 
     /**
      * Creates an instance of todos.
-     * 
+     *
      * @param file Path to json file.
      */
     public constructor(private file: string) {
@@ -26,7 +21,7 @@ export default class Todos {
 
     /**
      * Adds a new todo to json file.
-     * 
+     *
      * @param key Project directory.
      * @param todo Todo to add.
      */
@@ -38,7 +33,7 @@ export default class Todos {
 
     /**
      * Removes a todo from json file.
-     * 
+     *
      * @param key Project directory.
      * @param index Todo index in `key`.
      */
@@ -49,7 +44,7 @@ export default class Todos {
             let message: string = ""
 
             todos.splice(index - 1, 1).forEach((todo: string) => {
-                message += chalk.green(String.fromCodePoint(Icon.Check), chalk.strikethrough(`${todo}\n`))
+                message += chalk.green(String.fromCodePoint(Icons.Check), chalk.strikethrough(`${todo}\n`))
             })
 
             this.write()
@@ -60,7 +55,7 @@ export default class Todos {
 
     /**
      * Lists todos in json file.
-     * 
+     *
      * @param key Project directory.
      */
     public list(key: string | null): void {
@@ -71,7 +66,7 @@ export default class Todos {
 
     /**
      * Returns output string for listing project todos.
-     * 
+     *
      * @param key Project directory.
      * @returns Command output message.
      */
@@ -81,7 +76,7 @@ export default class Todos {
         const todos: string[] = this.todos[key] || []
 
         todos.forEach((todo: string, index: number) => {
-            message += `${chalk.yellow.bold(String.fromCodePoint(Icon.Memo), `${index + 1}:`)} ${todo}\n`
+            message += `${chalk.yellow.bold(String.fromCodePoint(Icons.Memo), `${index + 1}:`)} ${todo}\n`
         })
 
         return message
@@ -89,17 +84,17 @@ export default class Todos {
 
     /**
      * Returns output string for listing all todos.
-     * 
+     *
      * @returns Command output message.
      */
     protected all(): string {
         let message: string = ""
 
         for (const [project, todos] of Object.entries(this.todos)) {
-            message += `${chalk.bold(String.fromCodePoint(Icon.Folder), path.basename(project))} (${project})\n`
-            
+            message += `${chalk.bold(String.fromCodePoint(Icons.Folder), path.basename(project))} (${project})\n`
+
             todos.forEach((todo: string) => {
-                message += `${String.fromCodePoint(Icon.Memo)} ${todo}\n`
+                message += `${String.fromCodePoint(Icons.Memo)} ${todo}\n`
             })
 
             message += "\n"
@@ -110,7 +105,7 @@ export default class Todos {
 
     /**
      * Reads todos from json file.
-     * 
+     *
      * @returns Todos object.
      */
     protected read(): ITodos {
