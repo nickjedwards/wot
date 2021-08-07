@@ -18,7 +18,7 @@ if (!fs.existsSync(file)) {
     fs.writeFileSync(file, JSON.stringify({}), "utf-8")
 }
 
-const program = new Command()
+const program = new Command("wot?")
 
 program.version(process.env.npm_package_version || ":(", "-v, --version", "Output the current version")
 
